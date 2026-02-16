@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificador de Cartas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Clasifica las Cartas</h1>
+        <button id="reset-btn">Reiniciar Juego</button>
+    </header>
+
+    <main class="game-board">
+        <section id="deck-container" class="deck-area">
+        </section>
+
+        <section class="drop-zones-container">
+            <div class="drop-zone" data-suit="hearts">Corazones ♥</div>
+            <div class="drop-zone" data-suit="spades">Picas ♠</div>
+            <div class="drop-zone" data-suit="diamonds">Diamantes ♦</div>
+            <div class="drop-zone" data-suit="clubs">Tréboles ♣</div>
+        </section>
+    </main>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
