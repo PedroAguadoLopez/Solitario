@@ -1,41 +1,75 @@
 export class GameView {
     constructor() {
-        this.deckContainer = document.getElementById('deck-container');
-        this.dropZones = document.querySelectorAll('.drop-zone');
+        this.stockContainer = document.getElementById('stock');
+        this.wasteContainer = document.getElementById('waste');
     }
 
-    renderDeck(cards) {
-        this.deckContainer.innerHTML = '';
-        cards.forEach(card => {
-            const cardElement = document.createElement('div');
-            cardElement.classList.add('card', card.color);
-            cardElement.setAttribute('draggable', 'true');
-            cardElement.dataset.id = card.id;
-            cardElement.dataset.suit = card.suit;
-            cardElement.textContent = `${card.rank} ${this.getSuitSymbol(card.suit)}`;
-            
-            this.deckContainer.appendChild(cardElement);
+    createCardElement(card) {
+        const div = document.createElement('div');
+        div.classList.add('card');
+        div.dataset.id = card.id;
+
+        if (!card.visible) {
+            div.classList.add('face-down');
+            div.draggable = false;
+        } else {
+            div.classList.add(card.color);
+            div.draggable = true;
+            div.innerHTML = `
+                <div class="top">${card.rank} ${this.getSymbol(card.suit)}</div>
+                <div class="center">${this.getSymbol(card.suit)}</div>
+                <div class="bottom">${card.rank} ${this.getSymbol(card.suit)}</div>
+            `;
+        }
+        return div;
+    }
+
+    getSymbol(suit) {
+        const symbols = { hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠' };
+        return symbols[suit];
+    }
+
+    renderTableau(tableauData) {
+        tableauData.forEach((columnCards, index) => {
+            const colDiv = document.querySelector(`.column[data-col="${index}"]`);
+            colDiv.innerHTML = ''; // Limpiar
+            columnCards.forEach(card => {
+                colDiv.appendChild(this.createCardElement(card));
+            });
         });
     }
 
-    getSuitSymbol(suit) {
-        switch(suit) {
-            case 'hearts': return '♥';
-            case 'spades': return '♠';
-            case 'diamonds': return '♦';
-            case 'clubs': return '♣';
-            default: return '';
+    renderStock(stockCards) {
+        this.stockContainer.innerHTML = '';
+        if (stockCards.length > 0) {
+            // Mostrar reverso genérico si hay cartas
+            const placeholder = document.createElement('div');
+            placeholder.classList.add('card', 'face-down');
+            this.stockContainer.appendChild(placeholder);
+        } else {
+            this.stockContainer.innerHTML = '<div class="card-placeholder">↺</div>';
         }
     }
 
-    removeCardFromDeck(cardId) {
-        const card = document.querySelector(`.card[data-id="${cardId}"]`);
-        if (card) {
-            card.remove();
+    renderWaste(wasteCards) {
+        this.wasteContainer.innerHTML = '';
+        if (wasteCards.length > 0) {
+            // Mostrar solo la última carta del descarte
+            const topCard = wasteCards[wasteCards.length - 1];
+            this.wasteContainer.appendChild(this.createCardElement(topCard));
         }
     }
 
-    addCardToZone(cardElement, zoneElement) {
-        zoneElement.appendChild(cardElement);
+    renderFoundations(foundationsData) {
+        Object.keys(foundationsData).forEach(suit => {
+            const pileDiv = document.getElementById(`f-${suit}`);
+            pileDiv.innerHTML = '';
+            const cards = foundationsData[suit];
+            if (cards.length > 0) {
+                pileDiv.appendChild(this.createCardElement(cards[cards.length - 1]));
+            } else {
+                pileDiv.textContent = this.getSymbol(suit); // Símbolo de fondo si está vacía
+            }
+        });
     }
 }

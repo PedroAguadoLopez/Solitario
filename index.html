@@ -3,27 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clasificador de Cartas</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Solitario Clásico</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>Clasifica las Cartas</h1>
-        <button id="reset-btn">Reiniciar Juego</button>
+        <h1>Solitario JS</h1>
+        <button id="reset-btn">Nueva Partida</button>
     </header>
 
     <main class="game-board">
-        <section id="deck-container" class="deck-area">
+        <section class="top-row">
+            <div class="stock-pile" id="stock">
+                <div class="card-placeholder">↺</div>
+            </div>
+            <div class="waste-pile" id="waste"></div>
+            <div class="spacer"></div>
+            <div class="foundation" data-suit="hearts" id="f-hearts">♥</div>
+            <div class="foundation" data-suit="clubs" id="f-clubs">♣</div>
+            <div class="foundation" data-suit="diamonds" id="f-diamonds">♦</div>
+            <div class="foundation" data-suit="spades" id="f-spades">♠</div>
         </section>
 
-        <section class="drop-zones-container">
-            <div class="drop-zone" data-suit="hearts">Corazones ♥</div>
-            <div class="drop-zone" data-suit="spades">Picas ♠</div>
-            <div class="drop-zone" data-suit="diamonds">Diamantes ♦</div>
-            <div class="drop-zone" data-suit="clubs">Tréboles ♣</div>
+        <section class="tableau-row">
+            <div class="column" data-col="0"></div>
+            <div class="column" data-col="1"></div>
+            <div class="column" data-col="2"></div>
+            <div class="column" data-col="3"></div>
+            <div class="column" data-col="4"></div>
+            <div class="column" data-col="5"></div>
+            <div class="column" data-col="6"></div>
         </section>
     </main>
 
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="scripts/main.js"></script>
 </body>
 </html>

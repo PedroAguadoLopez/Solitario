@@ -1,70 +1,109 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: #006400; /* Verde tapete */
+    color: white;
+    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #2c3e50;
-    color: white;
-    height: 100vh;
-    margin: 0;
+    min-height: 100vh;
+}
+
+header {
+    margin: 10px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
 }
 
 .game-board {
+    width: 90%;
+    max-width: 1000px;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    width: 80%;
-    margin-top: 2rem;
+    gap: 20px;
 }
 
-.deck-area {
-    height: 150px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 10px;
-    justify-content: center;
-}
-
-.drop-zones-container {
+.top-row {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
+    height: 140px;
 }
 
-.drop-zone {
-    flex: 1;
-    height: 200px;
-    border: 2px dashed #ecf0f1;
-    border-radius: 10px;
+.tableau-row {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding-top: 10px;
+    justify-content: space-between;
+    min-height: 400px;
 }
 
+/* Espacios para cartas */
+.stock-pile, .waste-pile, .foundation, .column {
+    width: 100px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.stock-pile, .foundation {
+    border: 2px solid rgba(255,255,255,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    color: rgba(255,255,255,0.3);
+}
+
+/* Estilos de la carta */
 .card {
-    width: 80px;
-    height: 120px;
+    width: 100px;
+    height: 140px;
     background-color: white;
     color: black;
     border-radius: 5px;
+    border: 1px solid #999;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 1.2rem;
     cursor: grab;
     user-select: none;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    position: absolute; /* Clave para apilar en tableau */
 }
 
-.card.red {
-    color: red;
+/* Carta boca abajo */
+.card.face-down {
+    background: repeating-linear-gradient(
+        45deg,
+        #606dbc,
+        #606dbc 10px,
+        #465298 10px,
+        #465298 20px
+    );
+    cursor: default;
+    border: 2px solid white;
+}
+.card.face-down * {
+    display: none; 
 }
 
-.card.black {
-    color: black;
+/* Colores */
+.card.red { color: red; }
+.card.black { color: black; }
+
+/* Posicionamiento en columnas (Efecto Cascada visual simple) */
+.column .card {
+    position: relative;
+    margin-top: -100px; /* Hace que se monten */
+}
+.column .card:first-child {
+    margin-top: 0;
+}
+
+/* En Foundations y Waste las cartas se apilan absolutas (una encima de otra exacta) */
+.foundation .card, .waste-pile .card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
 }
