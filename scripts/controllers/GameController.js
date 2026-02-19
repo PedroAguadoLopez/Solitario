@@ -1,5 +1,5 @@
 import { DeckRepository } from '../database/DeckRepository.js';
-import { GameView } from '../views/Gameview.js';
+import { GameView } from '../views/GameView.js';
 
 export class GameController {
     constructor() {
@@ -9,15 +9,13 @@ export class GameController {
             stock: [],
             waste: [],
             foundations: { hearts: [], diamonds: [], clubs: [], spades: [] },
-            tableau: [[], [], [], [], [], [], []] 
+            tableau: [[], [], [], [], [], [], []]
         };
-        
         this.draggedCardData = null;
     }
 
     init() {
         const fullDeck = this.repository.createDeck();
-        
         let cardIndex = 0;
         for (let i = 0; i < 7; i++) {
             for (let j = 0; j <= i; j++) {
@@ -26,9 +24,7 @@ export class GameController {
                 this.gameState.tableau[i].push(card);
             }
         }
-
         this.gameState.stock = fullDeck.slice(cardIndex);
-
         this.updateView();
         this.setupEventListeners();
     }
@@ -42,12 +38,10 @@ export class GameController {
 
     setupEventListeners() {
         document.getElementById('stock').addEventListener('click', () => this.drawCard());
-
         document.getElementById('reset-btn').addEventListener('click', () => {
             this.gameState = { stock: [], waste: [], foundations: { hearts: [], diamonds: [], clubs: [], spades: [] }, tableau: [[], [], [], [], [], [], []] };
             this.init();
         });
-
         document.addEventListener('dragstart', (e) => this.handleDragStart(e));
         document.addEventListener('dragover', (e) => e.preventDefault());
         document.addEventListener('drop', (e) => this.handleDrop(e));
@@ -83,11 +77,13 @@ export class GameController {
         if (!target || !this.draggedCardData) return;
 
         const sourceCard = this.draggedCardData.card;
-        
+        const { location, index } = this.draggedCardData;
+
         if (target.classList.contains('column')) {
             const colIndex = parseInt(target.dataset.col);
             const column = this.gameState.tableau[colIndex];
             const topCard = column[column.length - 1];
+
             if (this.isValidTableauMove(sourceCard, topCard)) {
                 this.executeMove(colIndex, 'tableau');
             }
@@ -97,7 +93,16 @@ export class GameController {
             const suit = target.dataset.suit;
             const pile = this.gameState.foundations[suit];
             const topCard = pile[pile.length - 1];
-            if (this.isValidFoundationMove(sourceCard, topCard, suit)) {
+
+            let isStack = false;
+            if (location.startsWith('tableau')) {
+                const colIdx = parseInt(location.split('-')[1]);
+                if (this.gameState.tableau[colIdx].length - 1 > index) {
+                    isStack = true;
+                }
+            }
+
+            if (!isStack && this.isValidFoundationMove(sourceCard, topCard, suit)) {
                 this.executeMove(suit, 'foundation');
             }
         }
@@ -134,22 +139,22 @@ export class GameController {
 
     executeMove(targetId, targetType) {
         const { location, index } = this.draggedCardData;
-        let cardMoved;
+        let cardsMoved = [];
 
         if (location === 'waste') {
-            cardMoved = this.gameState.waste.pop();
+            cardsMoved = [this.gameState.waste.pop()];
         } else if (location.startsWith('tableau')) {
             const colIdx = parseInt(location.split('-')[1]);
-            cardMoved = this.gameState.tableau[colIdx].pop();
+            cardsMoved = this.gameState.tableau[colIdx].splice(index);
             
             const newTop = this.gameState.tableau[colIdx][this.gameState.tableau[colIdx].length - 1];
             if (newTop) newTop.visible = true;
         }
 
         if (targetType === 'tableau') {
-            this.gameState.tableau[targetId].push(cardMoved);
+            this.gameState.tableau[targetId].push(...cardsMoved);
         } else if (targetType === 'foundation') {
-            this.gameState.foundations[targetId].push(cardMoved);
+            this.gameState.foundations[targetId].push(cardsMoved[0]);
         }
 
         this.updateView();
@@ -158,11 +163,11 @@ export class GameController {
 
     findCardLocation(id) {
         const wasteCard = this.gameState.waste.find(c => c.id === id);
-        if (wasteCard) return { card: wasteCard, location: 'waste' };
+        if (wasteCard) return { card: wasteCard, location: 'waste', index: this.gameState.waste.length - 1 };
 
         for (let i = 0; i < 7; i++) {
-            const card = this.gameState.tableau[i].find(c => c.id === id);
-            if (card) return { card, location: `tableau-${i}` };
+            const index = this.gameState.tableau[i].findIndex(c => c.id === id);
+            if (index !== -1) return { card: this.gameState.tableau[i][index], location: `tableau-${i}`, index: index };
         }
         return null;
     }

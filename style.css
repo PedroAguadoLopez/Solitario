@@ -67,7 +67,7 @@ body {
 }
 
 .card.face-down {
-    background-image: url('assets/reverso.png') !important;
+    background-image: url('assets/cards/card-back2.png') !important;
     cursor: default;
 }
 

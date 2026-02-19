@@ -4,6 +4,14 @@ export class GameView {
         this.wasteContainer = document.getElementById('waste');
     }
 
+    getRankNumber(rank) {
+        if (rank === 'A') return 1;
+        if (rank === 'J') return 11;
+        if (rank === 'Q') return 12;
+        if (rank === 'K') return 13;
+        return rank;
+    }
+
     createCardElement(card) {
         const div = document.createElement('div');
         div.classList.add('card');
@@ -14,7 +22,8 @@ export class GameView {
             div.draggable = false;
         } else {
             div.draggable = true;
-            div.style.backgroundImage = `url('assets/cards/${card.id}.png')`;
+            const rankNum = this.getRankNumber(card.rank);
+            div.style.backgroundImage = `url('assets/cards/card-${card.suit}-${rankNum}.png')`;
         }
         
         return div;
