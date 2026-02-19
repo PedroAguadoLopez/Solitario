@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Solitario JS</h1>
-        <button id="reset-btn">Nueva Partida</button>
-    </header>
-
     <main class="game-board">
         <section class="top-row">
             <div class="stock-pile" id="stock">
@@ -19,10 +14,10 @@
             </div>
             <div class="waste-pile" id="waste"></div>
             <div class="spacer"></div>
-            <div class="foundation" data-suit="hearts" id="f-hearts">♥</div>
-            <div class="foundation" data-suit="clubs" id="f-clubs">♣</div>
-            <div class="foundation" data-suit="diamonds" id="f-diamonds">♦</div>
-            <div class="foundation" data-suit="spades" id="f-spades">♠</div>
+            <div class="foundation" data-suit="hearts" id="f-hearts"></div>
+            <div class="foundation" data-suit="clubs" id="f-clubs"></div>
+            <div class="foundation" data-suit="diamonds" id="f-diamonds"></div>
+            <div class="foundation" data-suit="spades" id="f-spades"></div>
         </section>
 
         <section class="tableau-row">
@@ -35,6 +30,8 @@
             <div class="column" data-col="6"></div>
         </section>
     </main>
+
+    <button id="reset-btn">Nueva Partida</button>
 
     <script type="module" src="scripts/main.js"></script>
 </body>

@@ -1,6 +1,10 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #006400; /* Verde tapete */
+    font-family: 'Times New Roman', serif;
+    background-image: url('assets/fondosolitario.jpg');
+    background-color: #006400;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
     color: white;
     margin: 0;
     display: flex;
@@ -9,25 +13,20 @@ body {
     min-height: 100vh;
 }
 
-header {
-    margin: 10px;
-    display: flex;
-    gap: 20px;
-    align-items: center;
-}
-
 .game-board {
-    width: 90%;
-    max-width: 1000px;
+    width: 95%;
+    max-width: 1200px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 40px;
+    margin-top: 38vh; 
+    margin-bottom: 20px;
 }
 
 .top-row {
     display: flex;
     justify-content: space-between;
-    height: 140px;
+    height: 145px;
 }
 
 .tableau-row {
@@ -36,74 +35,75 @@ header {
     min-height: 400px;
 }
 
-/* Espacios para cartas */
 .stock-pile, .waste-pile, .foundation, .column {
     width: 100px;
-    border-radius: 5px;
+    border-radius: 8px;
     position: relative;
 }
 
 .stock-pile, .foundation {
-    border: 2px solid rgba(255,255,255,0.3);
+    border: 2px solid rgba(255, 255, 255, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2rem;
-    color: rgba(255,255,255,0.3);
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Estilos de la carta */
 .card {
     width: 100px;
-    height: 140px;
-    background-color: white;
-    color: black;
-    border-radius: 5px;
-    border: 1px solid #999;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 5px;
-    box-sizing: border-box;
-    font-size: 1.2rem;
+    height: 145px; 
+    background-color: transparent;
+    border-radius: 8px;
+    box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.4);
     cursor: grab;
-    user-select: none;
-    position: absolute; /* Clave para apilar en tableau */
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.2s ease;
 }
 
-/* Carta boca abajo */
 .card.face-down {
-    background: repeating-linear-gradient(
-        45deg,
-        #606dbc,
-        #606dbc 10px,
-        #465298 10px,
-        #465298 20px
-    );
+    background-image: url('assets/reverso.png') !important;
     cursor: default;
-    border: 2px solid white;
-}
-.card.face-down * {
-    display: none; 
 }
 
-/* Colores */
-.card.red { color: red; }
-.card.black { color: black; }
-
-/* Posicionamiento en columnas (Efecto Cascada visual simple) */
 .column .card {
     position: relative;
-    margin-top: -100px; /* Hace que se monten */
+    margin-top: -115px; 
 }
+
 .column .card:first-child {
     margin-top: 0;
 }
 
-/* En Foundations y Waste las cartas se apilan absolutas (una encima de otra exacta) */
 .foundation .card, .waste-pile .card {
     position: absolute;
     top: 0;
     left: 0;
     margin: 0;
+}
+
+#reset-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #f3cf7a 0%, #bb902d 100%);
+    border: 1px solid #7a5d1a;
+    border-radius: 4px;
+    color: #2e2104;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    cursor: pointer;
+    z-index: 9999;
+}
+
+#reset-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
 }
