@@ -24,6 +24,10 @@ export class GameView {
             div.draggable = true;
             const rankNum = this.getRankNumber(card.rank);
             div.style.backgroundImage = `url('assets/cards/card-${card.suit}-${rankNum}.png')`;
+            
+            if (card.isNewDrawn) {
+                div.classList.add('flip-animate');
+            }
         }
         
         return div;
@@ -32,14 +36,17 @@ export class GameView {
     renderTableau(tableauData) {
         tableauData.forEach((columnCards, index) => {
             const colDiv = document.querySelector(`.column[data-col="${index}"]`);
-            colDiv.innerHTML = ''; 
-            columnCards.forEach(card => {
-                colDiv.appendChild(this.createCardElement(card));
-            });
+            if (colDiv) {
+                colDiv.innerHTML = ''; 
+                columnCards.forEach(card => {
+                    colDiv.appendChild(this.createCardElement(card));
+                });
+            }
         });
     }
 
     renderStock(stockCards) {
+        if (!this.stockContainer) return;
         this.stockContainer.innerHTML = '';
         if (stockCards.length > 0) {
             const placeholder = document.createElement('div');
@@ -51,22 +58,27 @@ export class GameView {
     }
 
     renderWaste(wasteCards) {
+        if (!this.wasteContainer) return;
         this.wasteContainer.innerHTML = '';
         if (wasteCards.length > 0) {
-            const topCard = wasteCards[wasteCards.length - 1];
-            this.wasteContainer.appendChild(this.createCardElement(topCard));
+            const cardsToRender = wasteCards.slice(-3);
+            cardsToRender.forEach(card => {
+                this.wasteContainer.appendChild(this.createCardElement(card));
+            });
         }
     }
 
     renderFoundations(foundationsData) {
         Object.keys(foundationsData).forEach(suit => {
             const pileDiv = document.getElementById(`f-${suit}`);
-            pileDiv.innerHTML = '';
-            const cards = foundationsData[suit];
-            if (cards.length > 0) {
-                pileDiv.appendChild(this.createCardElement(cards[cards.length - 1]));
-            } else {
-                pileDiv.innerHTML = this.getSuitSymbol(suit); 
+            if (pileDiv) {
+                pileDiv.innerHTML = '';
+                const cards = foundationsData[suit];
+                if (cards.length > 0) {
+                    pileDiv.appendChild(this.createCardElement(cards[cards.length - 1]));
+                } else {
+                    pileDiv.innerHTML = this.getSuitSymbol(suit); 
+                }
             }
         });
     }
@@ -74,5 +86,13 @@ export class GameView {
     getSuitSymbol(suit) {
         const symbols = { hearts: '♥', diamonds: '♦', clubs: '♣', spades: '♠' };
         return symbols[suit];
+    }
+
+    updateStats(score, timeFormatted) {
+        const scoreDisplay = document.getElementById('score-display');
+        const timeDisplay = document.getElementById('time-display');
+        
+        if (scoreDisplay) scoreDisplay.textContent = score;
+        if (timeDisplay) timeDisplay.textContent = timeFormatted;
     }
 }

@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="stats-container">
+        <div class="stat-box">Puntos: <span id="score-display">0</span></div>
+        <div class="stat-box">Tiempo: <span id="time-display">00:00</span></div>
+    </div>
+
     <main class="game-board">
         <section class="top-row">
             <div class="stock-pile" id="stock">
@@ -31,7 +36,34 @@
         </section>
     </main>
 
-    <button id="reset-btn">Nueva Partida</button>
+    <div class="action-buttons">
+        <button id="undo-btn" class="action-btn">Deshacer</button>
+        <button id="reset-btn" class="action-btn">Nueva Partida</button>
+    </div>
+
+    <div id="confirm-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>¿Empezar nueva partida?</h2>
+            <div class="modal-buttons">
+                <button id="btn-cancel">Cancelar</button>
+                <button id="btn-confirm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="victory-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 style="font-size: 3rem; margin-bottom: 10px;">¡Enhorabuena!</h2>
+            <p style="font-size: 1.2rem; color: #ddd; margin-bottom: 15px;">¡Has completado el solitario!</p>
+            <div class="final-stats">
+                <p>Puntuación Final: <span id="final-score">0</span></p>
+                <p>Tiempo Total: <span id="final-time">00:00</span></p>
+            </div>
+            <div class="modal-buttons" style="margin-top: 25px;">
+                <button id="btn-play-again">Jugar de Nuevo</button>
+            </div>
+        </div>
+    </div>
 
     <script type="module" src="scripts/main.js"></script>
 </body>
